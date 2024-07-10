@@ -1,6 +1,4 @@
-# ================================================================================================
-# Download
-# ================================================================================================
+# function cat
 function(cat IN_FILE OUT_FILE)
     file(READ ${IN_FILE} CONTENTS)
     file(APPEND ${OUT_FILE} "${CONTENTS}")
@@ -15,7 +13,7 @@ file(REMOVE ${3RDPARTY_TMP_FILE})    # remove old tmp file
 cat("${APP_SOURCE_DIR}/cmake/CMakeLists.txt.in" ${3RDPARTY_TMP_FILE})
 
 set(DEPENDENCIES
-        "jemalloc_CMakeLists.txt.in"
+#        "jemalloc_CMakeLists.txt.in"
         "fmt_CMakeLists.txt.in"
 )
 foreach (DEP IN LISTS DEPENDENCIES)

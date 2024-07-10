@@ -31,4 +31,15 @@ set_property(GLOBAL PROPERTY GLOBAL_DEPENDS_NO_CYCLES OFF)
 add_subdirectory(source)
 add_subdirectory(tests)
 
-include(${CMAKE_MODULE_PATH}/cmake.install)
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+
+# bin build
+# demo1
+add_executable(demo app/demo/demo.cpp)
+
+target_link_libraries(demo
+        PRIVATE
+        fmt::fmt
+)
+# demo2
+#add_executable(demo2 app/demo2/demo.cpp)

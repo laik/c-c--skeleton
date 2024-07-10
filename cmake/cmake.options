@@ -1,0 +1,5 @@
+option(
+        BUILD_TEST
+        "Build test"
+        ON
+)

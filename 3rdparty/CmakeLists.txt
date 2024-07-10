@@ -14,22 +14,35 @@ set(3RDPARTY_TMP_FILE "${CMAKE_BINARY_DIR}/deps_tmp_CMakeLists.txt.in")
 file(REMOVE ${3RDPARTY_TMP_FILE})    # remove old tmp file
 cat("${APP_SOURCE_DIR}/cmake/CMakeLists.txt.in" ${3RDPARTY_TMP_FILE})
 
-# add 3rdparty deps jemalloc
-cat("${APP_SOURCE_DIR}/cmake/jemalloc_CMakeLists.txt.in" ${3RDPARTY_TMP_FILE})
-# add 3rdparty deps fmt
-cat("${APP_SOURCE_DIR}/cmake/fmt_CMakeLists.txt.in" ${3RDPARTY_TMP_FILE})
+set(DEPENDENCIES
+        "jemalloc_CMakeLists.txt.in"
+        "fmt_CMakeLists.txt.in"
+)
+foreach (DEP IN LISTS DEPENDENCIES)
+    message(STATUS "get 3rdparty deps: ${DEP}")
+    cat("${APP_SOURCE_DIR}/cmake/external/${DEP}" ${3RDPARTY_TMP_FILE})
+endforeach (DEP)
 
-
-# download
+# merge configure file
 configure_file(${3RDPARTY_TMP_FILE} "${3RDPARTY_DIR}/deps-download/CMakeLists.txt")
+# download 3rdparty
 execute_process(COMMAND
         "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
         WORKING_DIRECTORY "${DEPS_DOWNLOAD_DIR}"
 )
+# build 3rdparty
 execute_process(COMMAND
         "${CMAKE_COMMAND}" --build .
         WORKING_DIRECTORY "${DEPS_DOWNLOAD_DIR}"
 )
+# install 3rdparty
+execute_process(COMMAND
+        "${CMAKE_COMMAND}" --install .
+        WORKING_DIRECTORY "${DEPS_DOWNLOAD_DIR}"
+)
+
+# fmt
+add_subdirectory(deps-download/fmt EXCLUDE_FROM_ALL)
 
 
-message(STATUS "3rdparty: ${3RDPARTY_TMP_FILE}")
+message(STATUS "3rdparty installed")

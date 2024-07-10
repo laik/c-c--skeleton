@@ -1,0 +1,35 @@
+# ================================================================================================
+# Download
+# ================================================================================================
+function(cat IN_FILE OUT_FILE)
+    file(READ ${IN_FILE} CONTENTS)
+    file(APPEND ${OUT_FILE} "${CONTENTS}")
+endfunction(cat IN_FILE OUT_FILE)
+
+
+# set 3rdparty download deps
+set(3RDPARTY_DIR "${APP_SOURCE_DIR}/3rdparty")
+set(DEPS_DOWNLOAD_DIR "${3RDPARTY_DIR}/deps-download")
+set(3RDPARTY_TMP_FILE "${CMAKE_BINARY_DIR}/deps_tmp_CMakeLists.txt.in")
+file(REMOVE ${3RDPARTY_TMP_FILE})    # remove old tmp file
+cat("${APP_SOURCE_DIR}/cmake/CMakeLists.txt.in" ${3RDPARTY_TMP_FILE})
+
+# add 3rdparty deps jemalloc
+cat("${APP_SOURCE_DIR}/cmake/jemalloc_CMakeLists.txt.in" ${3RDPARTY_TMP_FILE})
+# add 3rdparty deps fmt
+cat("${APP_SOURCE_DIR}/cmake/fmt_CMakeLists.txt.in" ${3RDPARTY_TMP_FILE})
+
+
+# download
+configure_file(${3RDPARTY_TMP_FILE} "${3RDPARTY_DIR}/deps-download/CMakeLists.txt")
+execute_process(COMMAND
+        "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
+        WORKING_DIRECTORY "${DEPS_DOWNLOAD_DIR}"
+)
+execute_process(COMMAND
+        "${CMAKE_COMMAND}" --build .
+        WORKING_DIRECTORY "${DEPS_DOWNLOAD_DIR}"
+)
+
+
+message(STATUS "3rdparty: ${3RDPARTY_TMP_FILE}")

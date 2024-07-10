@@ -1,0 +1,4 @@
+
+if(${BUILD_TEST})
+    add_subdirectory(app_test)
+endif(${BUILD_TEST})

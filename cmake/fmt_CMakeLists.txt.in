@@ -1,0 +1,14 @@
+
+# jemalloc
+ExternalProject_Add(fmt
+        GIT_REPOSITORY git@github.com:fmtlib/fmt.git
+        GIT_TAG 11.0.1
+        SOURCE_DIR "${DEPS_DOWNLOAD_DIR}/fmt"
+        BINARY_DIR ""
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ""
+        INSTALL_COMMAND ""
+        TEST_COMMAND ""
+        GIT_SHALLOW true
+        GIT_PROGRESS true
+)
